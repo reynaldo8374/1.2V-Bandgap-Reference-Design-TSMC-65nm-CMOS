@@ -1,10 +1,8 @@
 # 1.2 V Bandgap Reference in TSMC 65 nm CMOS
 
-<p align="center">
-  <b>Complete schematic-to-layout implementation of a Banba-style CMOS bandgap reference, including PVT, Monte Carlo, physical verification, parasitic extraction, and post-layout verification.</b>
-</p>
+Complete schematic-to-post-layout implementation of a Banba-style CMOS bandgap reference, including PVT and Monte Carlo verification, full-custom layout, physical verification, parasitic extraction, and extracted-circuit simulation.
 
-> **Project status:** Schematic design, pre-layout verification, layout, DRC/LVS/ERC review, parasitic extraction, and post-layout verification completed.
+**Status:** Schematic, layout, DRC/LVS review, parasitic extraction, and post-layout verification completed.
 
 ---
 
@@ -32,26 +30,9 @@
 
 ## 1. Project Overview
 
-This repository documents the design and physical implementation of a **1.2 V CMOS bandgap reference (BGR)** in a **TSMC 65 nm CMOS process**. The design is based on a Banba-style low-voltage bandgap architecture that combines:
+This repository documents a **1.2 V bandgap reference implemented in TSMC 65 nm CMOS**. The circuit uses a Banba-style current-summing core with a **24:1 PNP emitter-area ratio**, an operational amplifier that regulates the internal nodes \(V_X\) and \(V_Y\), a startup circuit, and a resistor network that independently sets the temperature balance and output-voltage scale.
 
-- a complementary-to-absolute-temperature (CTAT) bipolar junction voltage,
-- a proportional-to-absolute-temperature (PTAT) voltage/current,
-- an operational amplifier that forces the two internal sensing nodes to approximately the same voltage,
-- a resistor network that determines the PTAT/CTAT weighting and output scale, and
-- a startup circuit that avoids the undesired zero-current operating point.
-
-The project covers the complete custom IC workflow:
-
-1. transistor-level schematic design,
-2. nominal and PVT simulation,
-3. Monte Carlo process and mismatch verification,
-4. full-custom layout,
-5. DRC, LVS, and ERC review,
-6. Pegasus-to-Quantus parasitic extraction,
-7. extracted-SPICE integration in Cadence ADE, and
-8. post-layout verification and retuning.
-
-The screenshots and reported numerical values below correspond to the result files currently stored in this repository.
+The documented flow covers transistor-level design, PVT and Monte Carlo verification, full-custom layout, Pegasus DRC/LVS/ERC review, Quantus RC extraction, and extracted-SPICE simulation in Cadence ADE. All numerical results quoted in this README are taken from the committed simulation screenshots.
 
 ---
 
@@ -67,95 +48,215 @@ The screenshots and reported numerical values below correspond to the result fil
 | Temperature range | -40 °C to 125 °C |
 | Process corners | TT, SS, SF, FF, FS |
 | Monte Carlo samples | 1000 |
-| Main simulator | Cadence Spectre |
-| Post-layout extractor | Cadence Quantus |
-| DRC/LVS engine | Cadence Pegasus |
+| Circuit simulator | Cadence Spectre |
+| DRC/LVS | Cadence Pegasus |
+| Parasitic extraction | Cadence Quantus |
 
-### 2.2 Performance Summary
+### 2.2 Electrical Performance Summary
 
 | Metric | Pre-Layout | Post-Layout | Conditions |
 |---|---:|---:|---|
-| Reference voltage | approximately 1.200 V | approximately 1.2001 V | TT, 27 °C |
-| TT temperature coefficient | 2.66 ppm/°C | approximately 2.55 ppm/°C | -40 °C to 125 °C |
-| Line regulation | 15.51 mV/V | approximately 15.42 mV/V | VDD = 2.0 V to 3.0 V, TT, 27 °C |
-| Total supply current | approximately 87.16 µA | approximately 85.17 µA | VDD = 2.5 V, TT, 27 °C |
-| Power consumption | approximately 217.9 µW | approximately 212.9 µW | VDD = 2.5 V, TT, 27 °C |
-| Low-frequency PSRR | -36.88 dB | approximately -36.97 dB | TT, 27 °C |
-| MC process mean | approximately 1.20021 V | approximately 1.20023 V | 1000 samples, 27 °C |
-| MC process standard deviation | approximately 1.96 mV | approximately 1.935 mV | 1000 samples, 27 °C |
-| MC mismatch mean | approximately 1.20005 V | approximately 1.20001 V | 1000 samples, 27 °C |
-| MC mismatch standard deviation | approximately 445.86 µV | approximately 545.19 µV | 1000 samples, 27 °C |
-| DRC | — | Reviewed; one density-rule reminder shown | Pegasus |
-| LVS | — | Match | Pegasus |
-| ERC | — | One reviewed floating-well warning | Pegasus |
-| Startup | Verified | Verified | 1 µs, 100 µs, and 1 ms supply ramps |
+| Reference voltage | 1.2000 V | 1.2001 V | TT, 27 °C |
+| TT temperature coefficient | 2.66 ppm/°C | 2.55 ppm/°C | -40 °C to 125 °C |
+| Line regulation | 15.51 mV/V | 15.42 mV/V | VDD = 2.0 V to 3.0 V, TT, 27 °C |
+| Supply current | 87.16 µA | 85.17 µA | VDD = 2.5 V, TT, 27 °C |
+| Power consumption | 217.9 µW | 212.9 µW | VDD = 2.5 V, TT, 27 °C |
+| Low-frequency PSRR | -36.88 dB | -36.9861 dB | TT, 27 °C |
+| MC process mean | 1.20021 V | 1.20023 V | 1000 samples, 27 °C |
+| MC process standard deviation | 1.96 mV | 1.935 mV | 1000 samples, 27 °C |
+| MC mismatch mean | 1.20005 V | 1.20001 V | 1000 samples, 27 °C |
+| MC mismatch standard deviation | 445.86 µV | 545.19 µV | 1000 samples, 27 °C |
 
-The post-layout values remain close to the pre-layout results, indicating that the layout and extracted interconnect parasitics did not significantly degrade the nominal voltage, line regulation, current consumption, or process-variation distribution.
+### 2.3 Post-Layout PSRR Robustness
+
+The following low-frequency values were read from the post-layout PSRR markers.
+
+#### Process-Corner Variation at 27 °C
+
+| Corner | PSRR |
+|---|---:|
+| TT | -36.9861 dB |
+| SS | -36.6821 dB |
+| SF | -36.1072 dB |
+| FF | -37.1939 dB |
+| FS | -37.7213 dB |
+
+#### Temperature Variation at TT
+
+| Temperature | PSRR |
+|---|---:|
+| -40 °C | -38.8769 dB |
+| 27 °C | -36.9861 dB |
+| 125 °C | -34.5079 dB |
+
+The post-layout reference voltage and temperature coefficient are **final retuned results**, not an untouched before-and-after parasitic comparison. After extraction, the PTAT-path resistor was adjusted to restore the temperature slope, and the output resistor was then adjusted to center the TT output at 27 °C near 1.2 V.
 
 ---
 
 ## 3. Operating Principle
 
-### 3.1 CTAT and PTAT Components
+The derivation below follows the low-voltage current-summing bandgap formulation described by Behzad Razavi in *The Design of a Low-Voltage Bandgap Reference*. The architecture first combines PTAT and CTAT **currents**, then converts their sum into the output voltage through a separate resistor.
 
- The base-emitter voltage of a bipolar transistor, $V_{BE}$, has a negative temperature coefficient and therefore provides the **CTAT** component.
+### 3.1 Generation of the PTAT Component
 
-A pair of bipolar devices operated at different current densities produces:
+The amplifier regulates the common PMOS gate voltage so that:
 
 $$
-\Delta V_{BE} = V_T \ln(N)
+V_X \approx V_Y
+$$
+
+The two PNP devices carry comparable current densities but use an emitter-area ratio \(N\). With \(N=24\) in this implementation, their base-emitter-voltage difference is:
+
+$$
+\Delta V_{BE}
+=
+V_{BE1}-V_{BE2}
+=
+V_T \ln(N)
 $$
 
 where:
 
-- $V_T = kT/q$ is the thermal voltage,
-- $N$ is the emitter-area or current-density ratio, and
-- $\Delta V_{BE}$ is proportional to absolute temperature.
-
-The implemented bipolar ratio is:
-
 $$
-Q_0:Q_1 = 24:1
+V_T=\frac{kT}{q}
 $$
 
-### 3.2 Banba-Style Current Summation
+Because \(V_T\) is proportional to absolute temperature, \(\Delta V_{BE}\) is PTAT. In this circuit, \(\Delta V_{BE}\) appears across \(R_4\), producing:
 
-The resistor network converts the CTAT and PTAT voltages into currents. The output resistor converts the summed current back into the reference voltage:
+$$
+I_{\mathrm{PTAT}}
+=
+\frac{\Delta V_{BE}}{R_4}
+=
+\frac{V_T\ln(N)}{R_4}
+$$
+
+### 3.2 CTAT Current and Core Current
+
+The base-emitter voltage of the unit PNP has a negative temperature coefficient. With \(R_5=R_{18}\), the two regulated branches retain the symmetry required by the Banba core, and the mirrored core current can be written to first order as:
+
+$$
+I_{\mathrm{CORE}}
+\approx
+\frac{V_{BE1}}{R_{18}}
++
+\frac{V_T\ln(N)}{R_4}
+$$
+
+The first term is CTAT and the second is PTAT. Their temperature slopes are selected to cancel near the center of the specified temperature range.
+
+The condition for first-order temperature cancellation is:
+
+$$
+\frac{\mathrm{d}V_{BE1}}{\mathrm{d}T}
++
+\frac{R_{18}}{R_4}
+\frac{k}{q}\ln(N)
+\approx 0
+$$
+
+This relation explains the tuning strategy used in the design: \(R_4\) sets the PTAT weighting and therefore the temperature slope, while \(R_5\) and \(R_{18}\) remain matched.
+
+### 3.3 Output-Voltage Scaling
+
+The third PMOS branch copies the core current into the output resistor \(R_7\). The resulting reference voltage is:
 
 $$
 V_{\mathrm{REF}}
 \approx
-R_{\mathrm{OUT}}
+R_7 I_{\mathrm{CORE}}
+$$
+
+or, after substitution:
+
+$$
+V_{\mathrm{REF}}
+\approx
+R_7
 \left(
-\frac{V_{BE}}{R_{\mathrm{CTAT}}}
+\frac{V_{BE1}}{R_{18}}
 +
-\frac{\Delta V_{BE}}{R_{\mathrm{PTAT}}}
+\frac{V_T\ln(N)}{R_4}
 \right)
 $$
 
-In this design:
-
-- the small resistor in the $\Delta V_{BE}$ path primarily controls the PTAT contribution and temperature slope,
-- the two larger branch resistors preserve the Banba core relationship,
-- the output resistor primarily scales and recenters the final reference voltage, and
-- the op-amp forces the two internal nodes $V_X$ and $V_Y$ to nearly equal voltages.
-
-### 3.3 Temperature-Coefficient Definition
-
-The reported temperature coefficient is calculated using:
+An equivalent and more useful design form is:
 
 $$
-TC =
-\frac{V_{\mathrm{REF,max}}-V_{\mathrm{REF,min}}}
-{V_{\mathrm{REF}}(27^\circ\mathrm{C})\,(T_{\max}-T_{\min})}
-	imes 10^6
-\quad [\mathrm{ppm}/^\circ\mathrm{C}]
+V_{\mathrm{REF}}
+\approx
+\frac{R_7}{R_{18}}
+\left[
+V_{BE1}
++
+\frac{R_{18}}{R_4}V_T\ln(N)
+\right]
+$$
+
+This separation is important:
+
+| Component | Primary design role |
+|---|---|
+| \(R_4\) | Adjusts PTAT weighting and temperature coefficient |
+| \(R_5, R_{18}\) | Preserve the matched Banba core branches |
+| \(R_7\) | Scales and centers the final reference voltage |
+| \(N=24\) | Sets \(\Delta V_{BE}=V_T\ln(N)\) |
+| Operational amplifier | Forces \(V_X\approx V_Y\) |
+| Startup circuit | Prevents the zero-current equilibrium after power-up |
+
+The output resistor scales the summed current without changing the first-order PTAT-to-CTAT cancellation condition. This is why the post-layout tuning was performed in two steps: \(R_4\) was adjusted first for minimum temperature coefficient, followed by \(R_7\) for the final 1.2 V centering.
+
+### 3.4 Main Nonidealities
+
+Finite amplifier gain produces an error between \(V_X\) and \(V_Y\), while amplifier offset is amplified by the resistor ratio. Its first-order output contribution scales approximately as:
+
+$$
+\left|\Delta V_{\mathrm{REF,OS}}\right|
+\approx
+\frac{R_7}{R_{18}}
+\left(
+1+\frac{R_{18}}{R_4}
+\right)
+\left|V_{\mathrm{OS}}\right|
+$$
+
+The output also depends on current-mirror output resistance and on differences between the drain-source voltages of the core and output PMOS devices. These effects motivate adequate channel length, sufficient amplifier gain, and post-layout verification over process and temperature.
+
+For the PSRR plots in this repository, the displayed quantity is:
+
+$$
+\mathrm{PSRR}_{\mathrm{dB}}(f)
+=
+20\log_{10}
+\left|
+\frac{V_{\mathrm{OUT}}(f)}
+{V_{\mathrm{DD}}(f)}
+\right|
+$$
+
+More-negative values indicate better supply rejection. Low-frequency PSRR is strongly influenced by amplifier gain and internal supply feedthrough, while high-frequency behavior is increasingly determined by device capacitances and internal-node coupling. The core also admits a zero-current equilibrium, so a startup circuit is required to guarantee the intended operating point after power-up.
+
+The temperature coefficient reported throughout this project is:
+
+$$
+TC
+=
+\frac{
+V_{\mathrm{REF,max}}-V_{\mathrm{REF,min}}
+}{
+V_{\mathrm{REF}}(27^\circ\mathrm{C})
+\left(T_{\max}-T_{\min}\right)
+}
+\times 10^6
+\quad
+\left[\mathrm{ppm}/^\circ\mathrm{C}\right]
 $$
 
 with:
 
 $$
-T_{\min}=-40^\circ\mathrm{C},\qquad
+T_{\min}=-40^\circ\mathrm{C},
+\qquad
 T_{\max}=125^\circ\mathrm{C}
 $$
 
@@ -175,11 +276,11 @@ The final resistor network visible in the schematic uses approximately:
 
 | Component | Approximate Function | Nominal Resistance |
 |---|---|---:|
-| PTAT-path resistor | Sets $\Delta V_{BE}$-derived current | approximately 12.4 kΩ |
+| PTAT-path resistor | Sets \(\Delta V_{BE}\)-derived current | approximately 12.4 kΩ |
 | Core branch resistor 1 | CTAT/core branch scaling | approximately 73.5 kΩ |
 | Core branch resistor 2 | Matched core branch | approximately 73.5 kΩ |
 | Output resistor | Converts summed current into VREF | approximately 75.2 kΩ |
-| BJT ratio | Generates $\Delta V_{BE}$ | 24:1 |
+| BJT ratio | Generates \(\Delta V_{BE}\) | 24:1 |
 
 The temperature coefficient was tuned using the core PTAT-path resistor. After the temperature slope was optimized, the output resistor was used to center the TT, 27 °C output near 1.2 V.
 
@@ -191,9 +292,9 @@ The temperature coefficient was tuned using the core PTAT-path resistor. After t
 
 The operational amplifier regulates the Banba core by forcing:
 
-$$
+\[
 V_X \approx V_Y
-$$
+\]
 
 Its biasing, gain, and stability must remain sufficient across process and temperature variation because an incorrect loop operating point directly disturbs the PTAT/CTAT current balance.
 
@@ -229,9 +330,9 @@ The pre-layout response remains close to 1.2 V across the complete temperature r
 
 The nominal TT temperature coefficient is approximately:
 
-$$
+\[
 TC_{\mathrm{pre,TT}} = 2.66\ \mathrm{ppm}/^\circ\mathrm{C}
-$$
+\]
 
 This result was used as the baseline during post-layout resistor retuning.
 
@@ -243,19 +344,19 @@ This result was used as the baseline during post-layout resistor retuning.
 
 The supply voltage was swept from 2.0 V to 3.0 V at TT and 27 °C.
 
-$$
+\[
 \mathrm{Line\ Regulation}
 =
 \frac{V_{\mathrm{OUT,max}}-V_{\mathrm{OUT,min}}}
 {V_{\mathrm{DD,max}}-V_{\mathrm{DD,min}}}
-$$
+\]
 
 The reported pre-layout line regulation is:
 
-$$
+\[
 \mathrm{LineReg}_{\mathrm{pre}}
 \approx 15.51\ \mathrm{mV/V}
-$$
+\]
 
 ### 5.5 Startup Verification
 
@@ -289,10 +390,10 @@ The three runs verify startup under fast, intermediate, and slow supply ramps.
 
 The reported low-frequency pre-layout PSRR is approximately:
 
-$$
+\[
 \mathrm{PSRR}_{\mathrm{pre}}
 \approx -36.88\ \mathrm{dB}
-$$
+\]
 
 The response is dominated by the supply coupling through the biasing and amplifier paths, with frequency-dependent behavior caused by the amplifier and compensation network.
 
@@ -304,13 +405,13 @@ The response is dominated by the supply coupling through the biasing and amplifi
 
 For 1000 process-variation samples at 27 °C:
 
-$$
+\[
 \mu_{\mathrm{process,pre}} \approx 1.20021\ \mathrm{V}
-$$
+\]
 
-$$
+\[
 \sigma_{\mathrm{process,pre}} \approx 1.96\ \mathrm{mV}
-$$
+\]
 
 ### 5.8 Monte Carlo Mismatch
 
@@ -320,13 +421,13 @@ $$
 
 For 1000 mismatch samples at 27 °C:
 
-$$
+\[
 \mu_{\mathrm{mismatch,pre}} \approx 1.20005\ \mathrm{V}
-$$
+\]
 
-$$
+\[
 \sigma_{\mathrm{mismatch,pre}} \approx 445.86\ \mu\mathrm{V}
-$$
+\]
 
 The process distribution is wider than the mismatch-only distribution, showing that global process variation is the dominant simulated source of absolute reference-voltage spread.
 
@@ -461,17 +562,17 @@ The post-layout netlist was generated using **Cadence Quantus with Pegasus query
 
 ### 8.1 Extraction Workflow
 
-$$
-	ext{Layout}
+\[
+\text{Layout}
 \rightarrow
-	ext{Pegasus LVS / SVDB}
+\text{Pegasus LVS / SVDB}
 \rightarrow
-	ext{Quantus RC Extraction}
+\text{Quantus RC Extraction}
 \rightarrow
-	ext{Extracted SPICE Netlist}
+\text{Extracted SPICE Netlist}
 \rightarrow
-	ext{Cadence ADE Post-Layout Simulation}
-$$
+\text{Cadence ADE Post-Layout Simulation}
+\]
 
 ### 8.2 Quantus Pre-Setup
 
@@ -555,9 +656,9 @@ The op-amp, resistor devices, BJT array, and complete BGR were individually chec
 
 At TT and 27 °C, the extracted result is approximately:
 
-$$
+\[
 V_{\mathrm{REF,post}} \approx 1.2001\ \mathrm{V}
-$$
+\]
 
 The corner curves remain centered near 1.2 V, while the largest variation occurs at the fast/slow extremes over temperature.
 
@@ -569,9 +670,9 @@ The corner curves remain centered near 1.2 V, while the largest variation occurs
 
 The current repository result shows a nominal TT temperature coefficient of approximately:
 
-$$
+\[
 TC_{\mathrm{post,TT}} \approx 2.55\ \mathrm{ppm}/^\circ\mathrm{C}
-$$
+\]
 
 This is close to, and slightly better than, the 2.66 ppm/°C pre-layout result.
 
@@ -585,15 +686,15 @@ The core PTAT resistor was retuned after extraction to recover the optimum tempe
 
 From the displayed markers:
 
-- $V_{\mathrm{OUT}}$ at $V_{\mathrm{DD}}=2.0\ \mathrm{V}$ is approximately 1.19108 V,
-- $V_{\mathrm{OUT}}$ at $V_{\mathrm{DD}}=3.0\ \mathrm{V}$ is approximately 1.20649 V.
+- \(V_{\mathrm{OUT}}\) at \(V_{\mathrm{DD}}=2.0\ \mathrm{V}\) is approximately 1.19108 V,
+- \(V_{\mathrm{OUT}}\) at \(V_{\mathrm{DD}}=3.0\ \mathrm{V}\) is approximately 1.20649 V.
 
 Therefore:
 
-$$
+\[
 \mathrm{LineReg}_{\mathrm{post}}
 \approx 15.42\ \mathrm{mV/V}
-$$
+\]
 
 This result is effectively unchanged from the pre-layout line regulation.
 
@@ -651,10 +752,66 @@ PSRR degrades at high temperature in the shown result, while the low-temperature
 
 At the nominal 2.5 V supply:
 
-$$
+\[
 I_{\mathrm{DD,post}} \approx 85.17\ \mu\mathrm{A}
-$$
+\]
 
+\[
+P_{\mathrm{post}}
+=
+V_{\mathrm{DD}}I_{\mathrm{DD}}
+\approx
+2.5\ \mathrm{V}\times 85.17\ \mu\mathrm{A}
+\approx 212.9\ \mu\mathrm{W}
+\]
+
+The current increases with supply voltage, reaching approximately 137 µA at 3.0 V in the displayed sweep.
+
+### 9.9 Monte Carlo Process Variation
+
+<p align="center">
+  <img src="img/postlayout/monte_carlo_process_27c.png" width="90%">
+</p>
+
+For 1000 process-variation samples:
+
+\[
+\mu_{\mathrm{process,post}} \approx 1.20023\ \mathrm{V}
+\]
+
+\[
+\sigma_{\mathrm{process,post}} \approx 1.935\ \mathrm{mV}
+\]
+
+### 9.10 Monte Carlo Mismatch
+
+<p align="center">
+  <img src="img/postlayout/monte_carlo_mismatch_27c.png" width="90%">
+</p>
+
+For 1000 mismatch samples:
+
+\[
+\mu_{\mathrm{mismatch,post}} \approx 1.20001\ \mathrm{V}
+\]
+
+\[
+\sigma_{\mathrm{mismatch,post}} \approx 545.19\ \mu\mathrm{V}
+\]
+
+The process variation remains the dominant contributor to the simulated absolute reference-voltage spread.
+
+---
+
+## 10. Pre-Layout vs. Post-Layout Comparison
+
+| Metric | Pre-Layout | Post-Layout | Observation |
+|---|---:|---:|---|
+| VREF at TT, 27 °C | approximately 1.200 V | approximately 1.2001 V | Nominal target preserved |
+| TT temperature coefficient | 2.66 ppm/°C | approximately 2.55 ppm/°C | Recovered through post-layout resistor tuning |
+| Line regulation | 15.51 mV/V | approximately 15.42 mV/V | Essentially unchanged |
+| Total current at 2.5 V | approximately 87.16 µA | approximately 85.17 µA | Slight reduction |
+| Power at 2.5 V | approximately 217.9 µW | approximately 212.9 µW | Slight reduction |
 | Low-frequency PSRR at 27 °C | -36.88 dB | approximately -36.97 dB | Similar |
 | MC process mean | approximately 1.20021 V | approximately 1.20023 V | Nearly identical |
 | MC process sigma | approximately 1.96 mV | approximately 1.935 mV | Nearly identical |
@@ -753,7 +910,7 @@ A two-dimensional trimming strategy can use:
 
 ### 13.3 Curvature Compensation
 
-The first-order bandgap cancellation still leaves nonlinear $V_{BE}$ curvature. Future work can investigate:
+The first-order bandgap cancellation still leaves nonlinear \(V_{BE}\) curvature. Future work can investigate:
 
 - second-order curvature compensation,
 - piecewise nonlinear correction,
@@ -813,6 +970,60 @@ The BGR can be integrated as the reference source for:
 
 ---
 
+## 14. Repository Structure
+
+```text
+.
+├── README.md
+└── img
+    ├── prelayout
+    │   ├── bgr_schematic.png
+    │   ├── opamp_schematic.png
+    │   ├── temperature_sweep_all_corners.png
+    │   ├── temperature_coefficient_all_corners.png
+    │   ├── line_regulation_tt_27c.png
+    │   ├── startup_1us.png
+    │   ├── startup_100us.png
+    │   ├── startup_1ms.png
+    │   ├── psrr_tt_27c.png
+    │   ├── monte_carlo_process_27c.png
+    │   └── monte_carlo_mismatch_27c.png
+    └── postlayout
+        ├── bgr_schematic.png
+        ├── opamp_schematic.png
+        ├── final_layout.png
+        ├── drc_setup_run_data.png
+        ├── drc_setup_rules.png
+        ├── drc_result.png
+        ├── lvs_setup_run_data.png
+        ├── lvs_setup_rules.png
+        ├── lvs_setup_input.png
+        ├── lvs_setup_output.png
+        ├── lvs_setup_lvs_options.png
+        ├── lvs_result.png
+        ├── erc_warning.png
+        ├── pex_setup_1.png
+        ├── pex_setup_2.png
+        ├── pex_setup_directory.png
+        ├── pex_extraction.png
+        ├── post_layout_spice_format.png
+        ├── testbench_setup.png
+        ├── maestro_setup.png
+        ├── temperature_sweep_all_corners.png
+        ├── temperature_coefficient_all_corners.png
+        ├── line_regulation_tt_27c.png
+        ├── startup_1u.png
+        ├── startup_100u.png
+        ├── startup_1m.png
+        ├── psrr_all_corners.png
+        ├── psrr_temperature_variation.png
+        ├── total_curent.png
+        ├── monte_carlo_process_27c.png
+        └── monte_carlo_mismatch_27c.png
+```
+
+---
+
 ## 15. Tools and Technology
 
 | Task | Tool |
@@ -836,3 +1047,11 @@ The BGR can be integrated as the reference source for:
 5. Cadence Pegasus documentation for DRC, LVS, ERC, and Quantus query-data generation.
 6. Cadence Quantus documentation for transistor-level RC extraction and extracted-SPICE generation.
 
+---
+
+## 17. Author
+
+**Reynaldo Nicholas Sianturi**
+
+Electrical Engineering, Institut Teknologi Bandung  
+Focus: Analog and Mixed-Signal Integrated-Circuit Design
