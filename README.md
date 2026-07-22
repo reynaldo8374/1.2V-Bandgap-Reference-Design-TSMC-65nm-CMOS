@@ -312,11 +312,11 @@ The run-data setup defines the layout cell and output directories, while the rul
   <img src="img/postlayout/drc_result.png" width="95%">
 </p>
 
-The final DRC run completed with a reviewed density-related warning. No geometry violation affecting the circuit connectivity or device implementation was identified.
+The DRC run reported only DRM.R.1, an informational reminder to review the related requirement in the foundry Design Rule Manual. No actual geometry-rule violation was reported.
 
 ### 4.3 Layout Versus Schematic
 
-The Pegasus LVS run compares the devices and connectivity extracted from the layout against the schematic netlist.
+The Pegasus LVS run compares the devices and connectivity extracted from the layout against the schematic netlist. The setup below defines the run directory, rule deck, layout and schematic inputs, output files, supply-net definitions, and Quantus input-data generation.
 
 <table>
   <tr>
@@ -324,37 +324,36 @@ The Pegasus LVS run compares the devices and connectivity extracted from the lay
     <th width="50%">LVS Rule-Deck Configuration</th>
   </tr>
   <tr>
-    <td>
+    <td align="center">
       <img src="img/postlayout/lvs_setup_run_data.png" width="100%">
     </td>
-    <td>
+    <td align="center">
       <img src="img/postlayout/lvs_setup_rules.png" width="100%">
     </td>
   </tr>
-</table>
 
-<table>
   <tr>
-    <th width="50%">Layout and Schematic Inputs</th>
-    <th width="50%">LVS Output Configuration</th>
+    <th>Layout and Schematic Inputs</th>
+    <th>LVS Output Configuration</th>
   </tr>
   <tr>
-    <td>
+    <td align="center">
       <img src="img/postlayout/lvs_setup_input.png" width="100%">
     </td>
-    <td>
+    <td align="center">
       <img src="img/postlayout/lvs_setup_output.png" width="100%">
     </td>
   </tr>
+
+  <tr>
+    <th colspan="2">LVS Extraction Options</th>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="img/postlayout/lvs_setup_lvs_options.png" width="50%">
+    </td>
+  </tr>
 </table>
-
-#### LVS Extraction Options
-
-<p align="center">
-  <img src="img/postlayout/lvs_setup_lvs_options.png" width="90%">
-</p>
-
-The LVS options define the power and ground nets and enable the generation of the Pegasus query database required for the subsequent Quantus extraction flow.
 
 #### LVS Result
 
