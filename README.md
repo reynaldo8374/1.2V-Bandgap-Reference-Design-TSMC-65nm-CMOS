@@ -1,6 +1,6 @@
 # 1.2 V Bandgap Reference in TSMC 65 nm CMOS
 
-<p align="center">
+<p align="">
   <b>Complete schematic-to-layout implementation of a Banba-style CMOS bandgap reference, including PVT, Monte Carlo, physical verification, parasitic extraction, and post-layout verification.</b>
 </p>
 
