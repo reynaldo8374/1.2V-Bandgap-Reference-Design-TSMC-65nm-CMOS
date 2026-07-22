@@ -219,21 +219,28 @@ The resulting pre-layout line regulation is 15.51 mV/V.
 
 ### 3.3 Startup
 
-Startup was verified using fast, medium, and slow supply ramps (1 us, 100 us, 1 ms).
+Startup was verified using three supply-ramp durations to confirm that the circuit consistently reaches the intended operating point under different power-up conditions.
 
-<p align="center">
-  <img src="img/prelayout/startup_1us.png" width="90%">
-</p>
+<table>
+  <tr>
+    <th width="33.33%">1 µs Supply Ramp</th>
+    <th width="33.33%">100 µs Supply Ramp</th>
+    <th width="33.33%">1 ms Supply Ramp</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="img/prelayout/startup_1us.png" width="100%">
+    </td>
+    <td align="center">
+      <img src="img/prelayout/startup_100us.png" width="100%">
+    </td>
+    <td align="center">
+      <img src="img/prelayout/startup_1ms.png" width="100%">
+    </td>
+  </tr>
+</table>
 
-<p align="center">
-  <img src="img/prelayout/startup_100us.png" width="90%">
-</p>
-
-<p align="center">
-  <img src="img/prelayout/startup_1ms.png" width="90%">
-</p>
-
-All three cases converge to the intended bandgap operating point.
+The pre-layout circuit successfully starts and converges to the nominal reference voltage for fast, intermediate, and slow supply ramps.
 
 ### 3.4 PSRR
 
@@ -503,7 +510,29 @@ The `R4` value was reduced by approximately 0.32% to restore the PTAT-to-CTAT ba
 
 These values represent deliberate post-layout design retuning. They should not be interpreted as the resistance added directly by the extracted interconnect parasitics.
 
-### 6.2 Line Regulation and Current
+### 6.2 Temperature and Process Corners
+
+The post-layout reference voltage was evaluated from -40 °C to 125 °C across the TT, SS, SF, FF, and FS process corners.
+
+<p align="center">
+  <img src="img/postlayout/temperature_sweep_all_corners.png" width="95%">
+</p>
+
+The extracted circuit remains close to the 1.2 V target across the simulated temperature range. At the TT corner, the final retuned design produces approximately 1.2001 V at 27 °C.
+
+<p align="center">
+  <img src="img/postlayout/temperature_coefficient_all_corners.png" width="90%">
+</p>
+
+The final post-layout TT temperature coefficient is approximately:
+
+```math
+TC_{\mathrm{post,TT}} = 2.55\ \mathrm{ppm}/^\circ\mathrm{C}
+```
+
+The temperature coefficient was recovered by retuning the PTAT-path resistor `R4`, while the matched core resistors `R5` and `R18` were kept unchanged. The output resistor `R7` was then used only to recenter the nominal reference voltage near 1.2 V.
+
+### 6.3 Line Regulation and Current
 
 <p align="center">
   <img src="img/postlayout/line_regulation_tt_27c.png" width="90%">
@@ -527,23 +556,32 @@ V_{\mathrm{DD}} I_{\mathrm{DD}}
 212.93125\ \mu\mathrm{W}
 ```
 
-### 6.3 Startup
+### 6.4 Startup
 
-<p align="center">
-  <img src="img/postlayout/startup_1u.png" width="90%">
-</p>
+The extracted circuit was verified using the same three supply-ramp durations applied during pre-layout simulation.
 
-<p align="center">
-  <img src="img/postlayout/startup_100u.png" width="90%">
-</p>
+<table>
+  <tr>
+    <th width="33.33%">1 µs Supply Ramp</th>
+    <th width="33.33%">100 µs Supply Ramp</th>
+    <th width="33.33%">1 ms Supply Ramp</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="img/postlayout/startup_1u.png" width="100%">
+    </td>
+    <td align="center">
+      <img src="img/postlayout/startup_100u.png" width="100%">
+    </td>
+    <td align="center">
+      <img src="img/postlayout/startup_1m.png" width="100%">
+    </td>
+  </tr>
+</table>
 
-<p align="center">
-  <img src="img/postlayout/startup_1m.png" width="90%">
-</p>
+The post-layout circuit reaches the intended 1.2 V operating point in all three cases, confirming that the startup behavior is preserved after parasitic extraction.
 
-The extracted circuit reaches the intended operating point for all three tested supply-ramp durations.
-
-### 6.4 PSRR Robustness
+### 6.5 PSRR Robustness
 
 #### Process Corners at 27 °C
 
@@ -573,7 +611,7 @@ The extracted circuit reaches the intended operating point for all three tested 
 
 The displayed supply rejection is strongest at low temperature and degrades toward 125 °C.
 
-### 6.5 Monte Carlo Variation
+### 6.6 Monte Carlo Variation
 
 #### Process Variation
 
@@ -591,7 +629,7 @@ The extracted 1000-sample process distribution has a mean of 1.20023 V and a sta
 
 The mismatch-only distribution has a mean of 1.20001 V and a standard deviation of 545.19 µV.
 
-### 6.6 Final Comparison
+### 6.7 Final Comparison
 
 | Metric | Pre-Layout | Post-Layout | Result |
 |---|---:|---:|---|
