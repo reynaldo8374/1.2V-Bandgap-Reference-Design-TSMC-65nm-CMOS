@@ -417,53 +417,68 @@ The following setup uses the Pegasus LVS query database as the physical-design i
 
 The Pegasus query directory supplies the LVS-derived physical database to Quantus. The final post-layout netlist was generated using RC extraction so that both interconnect resistance and parasitic capacitance were included.
 
-### 5.2 Extracted SPICE Integration
+### 5.2 Extracted SPICE Netlist Preparation
 
-The extracted SPICE netlist was connected to the original BGR testbench and selected as the implementation of the BGR block in Cadence ADE.
+Quantus generated a transistor-level `.sp` netlist containing the extracted devices, interconnect resistance, and parasitic capacitance. The generated netlist was inspected before being used for post-layout simulation.
 
-<table>
-  <tr>
-    <th width="50%">Extracted SPICE Output</th>
-    <th width="50%">Post-Layout Testbench</th>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="img/postlayout/post_layout_spice_format.png" width="100%">
-    </td>
-    <td align="center">
-      <img src="img/postlayout/testbench_setup.png" width="100%">
-    </td>
-  </tr>
+<p align="center">
+  <img src="img/postlayout/post_layout_spice_format.png" width="95%">
+</p>
 
-  <tr>
-    <th colspan="2">ADE Maestro Post-Layout Setup</th>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      <img src="img/postlayout/maestro_setup.png" width="50%">
-    </td>
-  </tr>
-</table>
-
-This configuration allows the same analyses and output expressions used during pre-layout verification to be reused with the extracted circuit.
-
-### 5.3 PNP `AREA` Compatibility Issue
-
-Quantus initially generated each extracted unit PNP with:
+The extracted netlist correctly represented the intended 24:1 PNP ratio using one unit PNP in the smaller branch and 24 parallel unit PNPs in the larger branch. However, Quantus assigned the following parameter to each extracted unit PNP:
 
 ```spice
 AREA=2.5e-11
 ```
 
-The extracted netlist already represented the 24:1 ratio as one unit device in the small branch and 24 parallel unit devices in the large branch. In this simulator flow, directly using the physical area as the SPICE normalized `AREA` multiplier caused the PNP currents to collapse and forced `VX`, `VY`, and `VOUT` close to VDD.
+In this simulation flow, the PNP model interprets `AREA` as a normalized device multiplier rather than the physical emitter area in square meters. Therefore, using `AREA=2.5e-11` produced an incorrect PNP operating point and forced the extracted BGR output close to VDD.
 
-For simulation, the generated netlist was copied and the unit-device parameter was changed to:
+A copy of the generated `.sp` file was created, and the `AREA` parameter of every extracted unit PNP was changed to:
 
 ```spice
 AREA=1
 ```
 
-The 24 parallel PNP instances were retained, so the intended 24:1 ratio was preserved. This correction restored the expected 1.2 V operating point. The original PDK and original extraction output were not modified.
+Only the unit-device `AREA` parameter was modified. The number, connectivity, and 1:24 arrangement of the PNP instances were retained, preserving the intended emitter-area ratio.
+
+The corrected `.sp` file restored the expected operating point near 1.2 V and was used for all post-layout simulations. The original PDK files and original Quantus output were not modified.
+
+### 5.3 Post-Layout Testbench and ADE Setup
+
+The corrected extracted SPICE netlist was connected to the original BGR testbench and used as the implementation of the BGR block. The same supply sources, output load, simulation conditions, and measurement expressions were retained to provide a consistent comparison with the pre-layout results.
+
+<table>
+  <tr>
+    <th width="50%">Post-Layout Testbench</th>
+    <th width="50%">ADE Explorer / Maestro Setup</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="img/postlayout/testbench_setup.png" width="100%">
+    </td>
+    <td align="center">
+      <img src="img/postlayout/maestro_setup.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+The testbench provides the nominal 2.5 V supply, supply-voltage sweep, startup supply ramps, output loading, and access to the BGR output node. ADE Explorer was configured to run the temperature sweep, process corners, line regulation, startup transient, PSRR, current-consumption, and Monte Carlo analyses.
+
+The final post-layout simulation flow was:
+
+```text
+Quantus RC extraction
+        ↓
+Generated transistor-level .sp netlist
+        ↓
+Create a simulation copy
+        ↓
+Change each unit-PNP AREA from 2.5e-11 to 1
+        ↓
+Include the corrected .sp file in the BGR testbench
+        ↓
+Run the post-layout analyses in ADE Explorer
+```
 
 ---
 
