@@ -655,62 +655,6 @@ $$
 I_{\mathrm{DD,post}} \approx 85.17\ \mu\mathrm{A}
 $$
 
-$$
-P_{\mathrm{post}}
-=
-V_{\mathrm{DD}}I_{\mathrm{DD}}
-\approx
-2.5\ \mathrm{V}\times 85.17\ \mu\mathrm{A}
-\approx 212.9\ \mu\mathrm{W}
-$$
-
-The current increases with supply voltage, reaching approximately 137 µA at 3.0 V in the displayed sweep.
-
-### 9.9 Monte Carlo Process Variation
-
-<p align="center">
-  <img src="img/postlayout/monte_carlo_process_27c.png" width="90%">
-</p>
-
-For 1000 process-variation samples:
-
-$$
-\mu_{\mathrm{process,post}} \approx 1.20023\ \mathrm{V}
-$$
-
-$$
-\sigma_{\mathrm{process,post}} \approx 1.935\ \mathrm{mV}
-$$
-
-### 9.10 Monte Carlo Mismatch
-
-<p align="center">
-  <img src="img/postlayout/monte_carlo_mismatch_27c.png" width="90%">
-</p>
-
-For 1000 mismatch samples:
-
-$$
-\mu_{\mathrm{mismatch,post}} \approx 1.20001\ \mathrm{V}
-$$
-
-$$
-\sigma_{\mathrm{mismatch,post}} \approx 545.19\ \mu\mathrm{V}
-$$
-
-The process variation remains the dominant contributor to the simulated absolute reference-voltage spread.
-
----
-
-## 10. Pre-Layout vs. Post-Layout Comparison
-
-| Metric | Pre-Layout | Post-Layout | Observation |
-|---|---:|---:|---|
-| VREF at TT, 27 °C | approximately 1.200 V | approximately 1.2001 V | Nominal target preserved |
-| TT temperature coefficient | 2.66 ppm/°C | approximately 2.55 ppm/°C | Recovered through post-layout resistor tuning |
-| Line regulation | 15.51 mV/V | approximately 15.42 mV/V | Essentially unchanged |
-| Total current at 2.5 V | approximately 87.16 µA | approximately 85.17 µA | Slight reduction |
-| Power at 2.5 V | approximately 217.9 µW | approximately 212.9 µW | Slight reduction |
 | Low-frequency PSRR at 27 °C | -36.88 dB | approximately -36.97 dB | Similar |
 | MC process mean | approximately 1.20021 V | approximately 1.20023 V | Nearly identical |
 | MC process sigma | approximately 1.96 mV | approximately 1.935 mV | Nearly identical |
@@ -869,60 +813,6 @@ The BGR can be integrated as the reference source for:
 
 ---
 
-## 14. Repository Structure
-
-```text
-.
-├── README.md
-└── img
-    ├── prelayout
-    │   ├── bgr_schematic.png
-    │   ├── opamp_schematic.png
-    │   ├── temperature_sweep_all_corners.png
-    │   ├── temperature_coefficient_all_corners.png
-    │   ├── line_regulation_tt_27c.png
-    │   ├── startup_1us.png
-    │   ├── startup_100us.png
-    │   ├── startup_1ms.png
-    │   ├── psrr_tt_27c.png
-    │   ├── monte_carlo_process_27c.png
-    │   └── monte_carlo_mismatch_27c.png
-    └── postlayout
-        ├── bgr_schematic.png
-        ├── opamp_schematic.png
-        ├── final_layout.png
-        ├── drc_setup_run_data.png
-        ├── drc_setup_rules.png
-        ├── drc_result.png
-        ├── lvs_setup_run_data.png
-        ├── lvs_setup_rules.png
-        ├── lvs_setup_input.png
-        ├── lvs_setup_output.png
-        ├── lvs_setup_lvs_options.png
-        ├── lvs_result.png
-        ├── erc_warning.png
-        ├── pex_setup_1.png
-        ├── pex_setup_2.png
-        ├── pex_setup_directory.png
-        ├── pex_extraction.png
-        ├── post_layout_spice_format.png
-        ├── testbench_setup.png
-        ├── maestro_setup.png
-        ├── temperature_sweep_all_corners.png
-        ├── temperature_coefficient_all_corners.png
-        ├── line_regulation_tt_27c.png
-        ├── startup_1u.png
-        ├── startup_100u.png
-        ├── startup_1m.png
-        ├── psrr_all_corners.png
-        ├── psrr_temperature_variation.png
-        ├── total_curent.png
-        ├── monte_carlo_process_27c.png
-        └── monte_carlo_mismatch_27c.png
-```
-
----
-
 ## 15. Tools and Technology
 
 | Task | Tool |
@@ -946,11 +836,3 @@ The BGR can be integrated as the reference source for:
 5. Cadence Pegasus documentation for DRC, LVS, ERC, and Quantus query-data generation.
 6. Cadence Quantus documentation for transistor-level RC extraction and extracted-SPICE generation.
 
----
-
-## 17. Author
-
-**Reynaldo Nicholas Sianturi**
-
-Electrical Engineering, Institut Teknologi Bandung  
-Focus: Analog and Mixed-Signal Integrated-Circuit Design
