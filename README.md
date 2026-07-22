@@ -366,6 +366,14 @@ The LVS options define the power and ground nets and enable the generation of th
 
 The extracted layout and schematic contain equivalent devices, dimensions, and electrical connectivity.
 
+#### Electrical Rule Check
+
+<p align="center">
+  <img src="img/postlayout/erc_warning.png" width="95%">
+</p>
+
+The ERC report contains a reviewed floating-well warning associated with the implemented PNP structure. The warning is documented for traceability and does not alter the matched LVS result.
+
 ---
 
 ## 5. Parasitic Extraction and Simulation Setup
