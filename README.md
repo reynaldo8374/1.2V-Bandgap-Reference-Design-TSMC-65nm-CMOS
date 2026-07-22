@@ -2,7 +2,7 @@
 
 This repository documents the complete design of a **1.2 V Banba-style bandgap reference** in a TSMC 65 nm CMOS process, from transistor-level schematic verification to full-custom layout, physical verification, parasitic extraction, and post-layout simulation.
 
-The circuit operates from a nominal 2.5 V supply and uses a 24:1 PNP emitter-area ratio, an operational amplifier, a startup circuit, and a resistor network that separately controls the temperature slope and the final output-voltage level.
+The circuit operates from a nominal 2.5 V supply and is designed to provide a stable 1.2 V reference for an LDO regulator across process, supply, and temperature variations.
 
 ---
 
@@ -23,16 +23,16 @@ The circuit operates from a nominal 2.5 V supply and uses a 24:1 PNP emitter-are
 
 | Metric | Pre-Layout | Post-Layout | Conditions |
 |---|---:|---:|---|
-| Reference voltage | 1.2000 V | 1.2001 V | TT, 27 °C |
-| TT temperature coefficient | 2.66 ppm/°C | 2.55 ppm/°C | -40 °C to 125 °C |
-| Line regulation | 15.51 mV/V | 15.42 mV/V | VDD = 2.0 V to 3.0 V, TT, 27 °C |
-| Supply current | 87.16 µA | 85.17 µA | VDD = 2.5 V, TT, 27 °C |
-| Power consumption | 217.9 µW | 212.9 µW | VDD = 2.5 V, TT, 27 °C |
-| Low-frequency PSRR | -36.88 dB | -36.9861 dB | TT, 27 °C |
-| MC process mean | 1.20021 V | 1.20023 V | 1000 samples, 27 °C |
-| MC process standard deviation | 1.96 mV | 1.935 mV | 1000 samples, 27 °C |
-| MC mismatch mean | 1.20005 V | 1.20001 V | 1000 samples, 27 °C |
-| MC mismatch standard deviation | 445.86 µV | 545.19 µV | 1000 samples, 27 °C |
+| Reference voltage | 1.2000534 V | 1.2000554 V | TT, 27 °C |
+| TT temperature coefficient | 2.667 ppm/°C | 2.553 ppm/°C | -40 °C to 125 °C |
+| Line regulation | 15.51 mV/V | 15.417727 mV/V | VDD = 2.0 V to 3.0 V, TT, 27 °C |
+| Supply current | 87.16463 µA | 85.1725 µA | VDD = 2.5 V, TT, 27 °C |
+| Power consumption | 217.911575 µW | 212.93125 µW | VDD = 2.5 V, TT, 27 °C |
+| Low-frequency PSRR | -36.8861 dB | -36.9861 dB | TT, 27 °C |
+| MC process mean | 1.20021 V | 1.20025 V | 1000 samples, 27 °C |
+| MC process standard deviation | 1.96571 mV | 1.93490 mV | 1000 samples, 27 °C |
+| MC mismatch mean | 1.20005 V | 1.20011 V | 1000 samples, 27 °C |
+| MC mismatch standard deviation | 445.866 µV | 545.192 µV | 1000 samples, 27 °C |
 
 The post-layout reference voltage and temperature coefficient are **final retuned results**. After extraction, the PTAT-path resistor was adjusted to recover the optimum temperature slope. The output resistor was then adjusted independently to recenter the TT output near 1.2 V at 27 °C.
 
@@ -119,9 +119,9 @@ This relation separates the two tuning functions clearly:
 
 | Element | Primary role |
 |---|---|
-| `R4` | Sets PTAT weighting and temperature coefficient |
-| `R5` and `R18` | Preserve the matched Banba core branches |
-| `R7` | Scales and centers the final reference voltage |
+| `R4 the one connects with N BJT` | Sets PTAT weighting and temperature coefficient |
+| `R5 the one in the VX branch` and `R18 the one in the VY branch` | Preserve the matched Banba core branches |
+| `R7 or output resistor` | Scales and centers the final reference voltage |
 | PNP ratio `24:1` | Generates the PTAT `ΔVBE` term |
 | Operational amplifier | Forces `VX ≈ VY` |
 | Startup circuit | Prevents the zero-current operating point |
