@@ -445,7 +445,7 @@ The corrected `.sp` file restored the expected operating point near 1.2 V and wa
 
 ### 5.3 Post-Layout Testbench and ADE Setup
 
-The corrected extracted SPICE netlist was connected to the original BGR testbench and used as the implementation of the BGR block. The same supply sources, output load, simulation conditions, and measurement expressions were retained to provide a consistent comparison with the pre-layout results.
+The original BGR testbench was retained for post-layout simulation. The corrected extracted `.sp` netlist was included through a Cadence configuration view, which binds the BGR instance to the post-extraction SPICE file instead of the original schematic implementation. This allows Cadence to read and simulate the extracted transistor-level netlist while preserving the original supply sources, output load, simulation conditions, and measurement expressions.
 
 <table>
   <tr>
@@ -462,22 +462,26 @@ The corrected extracted SPICE netlist was connected to the original BGR testbenc
   </tr>
 </table>
 
-The testbench provides the nominal 2.5 V supply, supply-voltage sweep, startup supply ramps, output loading, and access to the BGR output node. ADE Explorer was configured to run the temperature sweep, process corners, line regulation, startup transient, PSRR, current-consumption, and Monte Carlo analyses.
+The testbench provides the nominal 2.5 V supply, supply-voltage sweep, startup supply ramps, output loading, and access to the BGR output node. The configuration view ensures that the corrected post-extraction `.sp` file is used as the implementation of the BGR block during simulation.
+
+ADE Explorer was configured to run the temperature sweep, process corners, line regulation, startup transient, PSRR, current-consumption, and Monte Carlo analyses.
 
 The final post-layout simulation flow was:
 
 ```text
 Quantus RC extraction
         ↓
-Generated transistor-level .sp netlist
+Generate the transistor-level .sp netlist
         ↓
 Create a simulation copy
         ↓
 Change each unit-PNP AREA from 2.5e-11 to 1
         ↓
-Include the corrected .sp file in the BGR testbench
+Include the corrected .sp file through the Cadence configuration view
         ↓
-Run the post-layout analyses in ADE Explorer
+Open the testbench configuration in ADE Explorer
+        ↓
+Run the post-layout verification analyses
 ```
 
 ---
