@@ -287,18 +287,32 @@ The layout integrates the 24-unit PNP array, segmented poly resistors, the BGR c
 
 ### 4.2 DRC
 
+The following configuration was used to run the Pegasus DRC verification.
+
 <table>
   <tr>
-    <td width="50%"><img src="img/postlayout/drc_setup_run_data.png" width="100%"></td>
-    <td width="50%"><img src="img/postlayout/drc_setup_rules.png" width="100%"></td>
+    <th width="50%">DRC Run Data</th>
+    <th width="50%">DRC Rule-Deck Configuration</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="img/postlayout/drc_setup_run_data.png" width="100%">
+    </td>
+    <td>
+      <img src="img/postlayout/drc_setup_rules.png" width="100%">
+    </td>
   </tr>
 </table>
+
+The run-data setup defines the layout cell and output directories, while the rule configuration selects the process-specific DRC rule deck.
+
+#### DRC Result
 
 <p align="center">
   <img src="img/postlayout/drc_result.png" width="95%">
 </p>
 
-The captured run contains a reviewed density-related reminder. The result is documented explicitly because density handling is part of the final manufacturability flow.
+The final DRC run completed with a reviewed density-related warning. No geometry violation affecting the circuit connectivity or device implementation was identified.
 
 ### 4.3 LVS and ERC
 
