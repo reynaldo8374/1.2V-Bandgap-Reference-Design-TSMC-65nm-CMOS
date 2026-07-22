@@ -191,7 +191,7 @@ The post-layout simulation results remain closely aligned with the pre-layout re
   <img src="img/prelayout/temperature_sweep_all_corners.png" width="95%">
 </p>
 
-The reference was swept from -40 °C to 125 °C across TT, SS, SF, FF, and FS. The nominal TT curve achieves a temperature coefficient of 2.66 ppm/°C.
+The reference was swept from -40 °C to 125 °C across TT, SS, SF, FF, and FS. The nominal TT curve achieves a temperature coefficient of 2.667 ppm/°C.
 
 <p align="center">
   <img src="img/prelayout/temperature_coefficient_all_corners.png" width="90%">
@@ -219,7 +219,7 @@ The resulting pre-layout line regulation is 15.51 mV/V.
 
 ### 3.3 Startup
 
-Startup was verified using fast, medium, and slow supply ramps.
+Startup was verified using fast, medium, and slow supply ramps (1 us, 100 us, 1 ms).
 
 <p align="center">
   <img src="img/prelayout/startup_1us.png" width="90%">
@@ -263,7 +263,7 @@ The low-frequency result at TT and 27 °C is -36.88 dB. More-negative values ind
   <img src="img/prelayout/monte_carlo_process_27c.png" width="90%">
 </p>
 
-The 1000-sample process run gives a mean of 1.20021 V and a standard deviation of 1.96 mV.
+The 1000-sample process run gives a mean of 1.20021 V and a standard deviation of 1.96571 mV.
 
 #### Device Mismatch
 
@@ -271,7 +271,7 @@ The 1000-sample process run gives a mean of 1.20021 V and a standard deviation o
   <img src="img/prelayout/monte_carlo_mismatch_27c.png" width="90%">
 </p>
 
-The mismatch-only run gives a mean of 1.20005 V and a standard deviation of 445.86 µV. The wider process distribution shows that global process variation dominates the simulated absolute-output spread.
+The mismatch-only run gives a mean of 1.20005 V and a standard deviation of 445.866 µV. The wider process distribution shows that global process variation dominates the simulated absolute-output spread.
 
 ---
 
@@ -283,7 +283,7 @@ The mismatch-only run gives a mean of 1.20005 V and a standard deviation of 445.
   <img src="img/postlayout/final_layout.png" width="95%">
 </p>
 
-The layout integrates the 24-unit PNP array, segmented poly resistors, the BGR mirrors, the operational amplifier, compensation components, power routing, and substrate/well contacts. Repeated unit devices and symmetric routing were used where practical to preserve matching.
+The layout integrates the 24-unit PNP array, segmented poly resistors, the BGR current mirrors, the operational amplifier, compensation components, power routing, and substrate/well contacts. Matched transistors and resistors were implemented using common-centroid and symmetric placement where applicable, while dummy transistors and dummy resistor segments were added at the array boundaries to reduce edge-related process variation. Repeated unit devices, balanced routing, and similar surrounding environments were also maintained to minimize systematic mismatch between critical branches. Guard rings and distributed substrate/well contacts were used to improve isolation and provide a low-resistance body connection, while the sensitive BGR core and amplifier input nodes were routed as symmetrically and compactly as practical.
 
 ### 4.2 DRC
 
