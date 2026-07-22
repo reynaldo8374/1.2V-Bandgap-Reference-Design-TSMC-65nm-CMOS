@@ -619,7 +619,7 @@ The displayed supply rejection is strongest at low temperature and degrades towa
   <img src="img/postlayout/monte_carlo_process_27c.png" width="90%">
 </p>
 
-The extracted 1000-sample process distribution has a mean of 1.20023 V and a standard deviation of 1.935 mV.
+The extracted 1000-sample process distribution has a mean of 1.20025 V and a standard deviation of 1.93490 mV.
 
 #### Device Mismatch
 
@@ -627,28 +627,33 @@ The extracted 1000-sample process distribution has a mean of 1.20023 V and a sta
   <img src="img/postlayout/monte_carlo_mismatch_27c.png" width="90%">
 </p>
 
-The mismatch-only distribution has a mean of 1.20001 V and a standard deviation of 545.19 µV.
+The mismatch-only distribution has a mean of 1.20011 V and a standard deviation of 545.192 µV.
 
 ### 6.7 Final Comparison
 
-| Metric | Pre-Layout | Post-Layout | Result |
+| Metric | Pre-Layout | Post-Layout | Observation |
 |---|---:|---:|---|
-| VREF at TT, 27 °C | 1.2000 V | 1.2001 V | Recentered after extraction |
-| TT temperature coefficient | 2.66 ppm/°C | 2.55 ppm/°C | Restored by `R4` retuning |
-| Line regulation | 15.51 mV/V | 15.42 mV/V | Preserved |
-| Supply current | 87.16 µA | 85.17 µA | Slightly reduced |
-| Low-frequency PSRR | -36.88 dB | -36.9861 dB | Preserved |
-| MC process sigma | 1.96 mV | 1.935 mV | Nearly unchanged |
-| MC mismatch sigma | 445.86 µV | 545.19 µV | Increased after extraction |
-| Startup | Pass | Pass | Preserved |
+| Reference voltage at TT, 27 °C | 1.2000534 V | 1.2000554 V | Recentered near 1.2 V after post-layout retuning |
+| TT temperature coefficient | 2.667 ppm/°C | 2.553 ppm/°C | Improved after `R4` retuning |
+| Line regulation | 15.51 mV/V | 15.417727 mV/V | Slightly improved |
+| Supply current | 87.16463 µA | 85.1725 µA | Reduced by approximately 1.99 µA |
+| Power consumption | 217.911575 µW | 212.93125 µW | Reduced by approximately 4.98 µW |
+| Low-frequency PSRR | -36.8861 dB | -36.9861 dB | Slightly improved |
+| MC process mean | 1.20021 V | 1.20025 V | Mean remains close to 1.2 V |
+| MC process standard deviation | 1.96571 mV | 1.93490 mV | Slightly reduced |
+| MC mismatch mean | 1.20005 V | 1.20011 V | Mean remains close to 1.2 V |
+| MC mismatch standard deviation | 445.866 µV | 545.192 µV | Increased after extraction |
+| Startup verification | Pass | Pass | Preserved for 1 µs, 100 µs, and 1 ms supply ramps |
 
-The final extracted circuit retains the pre-layout performance after a deliberate two-step retuning procedure: `R4` was used for temperature-coefficient recovery and `R7` for nominal-voltage centering.
+The final post-layout results were obtained after deliberate resistor retuning rather than from the extracted circuit without modification. The PTAT-path resistor `R4` was adjusted first to minimize the temperature coefficient, while the output resistor `R7` was subsequently adjusted to recenter the reference voltage near 1.2 V at the TT corner and 27 °C.
+
+Overall, the extracted circuit preserves the intended BGR operation. The nominal voltage, line regulation, PSRR, process variation, current consumption, and startup behavior remain comparable to the pre-layout design, while the TT temperature coefficient improves from 2.667 ppm/°C to 2.553 ppm/°C.
 
 ---
 
-## 7. Future Improvements and References
+### Future Improvements
 
-Future revisions can add independent trim networks for the PTAT path and output resistor, allowing post-silicon calibration of temperature coefficient and nominal VREF. Other useful extensions include curvature compensation, output-noise characterization, improved high-temperature PSRR, lower-power biasing, and full tapeout preparation with pads, ESD protection, density fill, seal ring, and silicon measurement planning.
+Future work includes output-noise characterization, improved PSRR and power efficiency, integration with the target LDO, and silicon measurement.
 
 ### References
 
