@@ -518,7 +518,7 @@ The post-layout reference voltage was evaluated from -40 °C to 125 °C across t
   <img src="img/postlayout/temperature_sweep_all_corners.png" width="95%">
 </p>
 
-The extracted circuit remains close to the 1.2 V target across the simulated temperature range. At the TT corner, the final retuned design produces approximately 1.2001 V at 27 °C.
+The extracted circuit remains close to the 1.2 V target across the simulated temperature range. At the TT corner, the final retuned design produces 1.2000554 V at 27 °C.
 
 <p align="center">
   <img src="img/postlayout/temperature_coefficient_all_corners.png" width="90%">
