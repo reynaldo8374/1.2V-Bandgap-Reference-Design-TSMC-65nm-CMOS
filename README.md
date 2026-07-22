@@ -488,19 +488,20 @@ Run the post-layout verification analyses
 
 ## 6. Post-Layout Results
 
-### 6.1 Temperature and Process Corners
+### 6.1 Post-Layout Resistor Retuning
 
-<p align="center">
-  <img src="img/postlayout/temperature_sweep_all_corners.png" width="95%">
-</p>
+After parasitic extraction, the PTAT-path resistor `R4` and output resistor `R7` were slightly retuned to recover the temperature coefficient and recenter the nominal output voltage. The matched core resistors `R5` and `R18` were kept unchanged.
 
-After retuning `R4`, the TT post-layout temperature coefficient is 2.55 ppm/°C.
+| Component | Pre-Layout Value | Final Post-Layout-Tuned Value | Change | Relative Change |
+|---|---:|---:|---:|---:|
+| `R4` | 12.3998 kΩ | 12.3601 kΩ | -39.7 Ω | -0.320% |
+| `R5` | 73.5024 kΩ | 73.5024 kΩ | 0 Ω | 0% |
+| `R18` | 73.5024 kΩ | 73.5024 kΩ | 0 Ω | 0% |
+| `R7` | 75.1790 kΩ | 75.1684 kΩ | -10.6 Ω | -0.014% |
 
-<p align="center">
-  <img src="img/postlayout/temperature_coefficient_all_corners.png" width="90%">
-</p>
+The `R4` value was reduced by approximately 0.32% to restore the PTAT-to-CTAT balance and minimize the post-layout temperature coefficient. After the temperature slope was optimized, `R7` was reduced by approximately 0.014% to center the TT output voltage at 27 °C near 1.2 V.
 
-After the temperature slope was restored, `R7` was adjusted to center the TT output at 27 °C near 1.2 V. The output resistor was not used to correct the temperature slope.
+These values represent deliberate post-layout design retuning. They should not be interpreted as the resistance added directly by the extracted interconnect parasitics.
 
 ### 6.2 Line Regulation and Current
 
