@@ -182,7 +182,6 @@ The exact gain, GBW, and phase-margin values are annotated in the table below.
 | Phase Margin | 61.4862° | 60.8178° | −0.6684° |
 
 The post-layout simulation results remain closely aligned with the pre-layout results. The extracted parasitic components cause only minor variations in gain, gain-bandwidth product, and phase margin, indicating that the op-amp performance is well preserved after layout extraction.
----
 
 ## 3. Pre-Layout Verification
 
