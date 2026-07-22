@@ -522,9 +522,9 @@ P_{\mathrm{post}}
 =
 V_{\mathrm{DD}} I_{\mathrm{DD}}
 =
-(2.5\ \mathrm{V})(85.17\ \mu\mathrm{A})
+(2.5\ \mathrm{V})(85.1725\ \mu\mathrm{A})
 =
-212.9\ \mu\mathrm{W}
+212.93125\ \mu\mathrm{W}
 ```
 
 ### 6.3 Startup
