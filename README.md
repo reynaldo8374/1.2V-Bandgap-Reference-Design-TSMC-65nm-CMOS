@@ -173,8 +173,15 @@ The following figure compares the pre-layout and post-layout amplifier responses
   <img src="img/postlayout/opamp_result.png" width="95%">
 </p>
 
-The exact gain, GBW, and phase-margin values are annotated in the committed comparison figure.
+The exact gain, GBW, and phase-margin values are annotated in the table below.
 
+| Parameter | Pre-Layout | Post-Layout | Difference |
+|---|---:|---:|---:|
+| DC Gain | 86.6912 dB | 86.6874 dB | −0.0038 dB |
+| Gain-Bandwidth Product (GBW) | 15.4357 MHz | 15.8439 MHz | +0.4082 MHz |
+| Phase Margin | 61.4862° | 60.8178° | −0.6684° |
+
+The post-layout simulation results remain closely aligned with the pre-layout results. The extracted parasitic components cause only minor variations in gain, gain-bandwidth product, and phase margin, indicating that the op-amp performance is well preserved after layout extraction.
 ---
 
 ## 3. Pre-Layout Verification
