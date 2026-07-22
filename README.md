@@ -527,7 +527,7 @@ The extracted circuit remains close to the 1.2 V target across the simulated tem
 The final post-layout TT temperature coefficient is approximately:
 
 ```math
-TC_{\mathrm{post,TT}} = 2.55\ \mathrm{ppm}/^\circ\mathrm{C}
+TC_{\mathrm{post,TT}} = 2.553\ \mathrm{ppm}/^\circ\mathrm{C}
 ```
 
 The temperature coefficient was recovered by retuning the PTAT-path resistor `R4`, while the matched core resistors `R5` and `R18` were kept unchanged. The output resistor `R7` was then used only to recenter the nominal reference voltage near 1.2 V.
@@ -538,13 +538,13 @@ The temperature coefficient was recovered by retuning the PTAT-path resistor `R4
   <img src="img/postlayout/line_regulation_tt_27c.png" width="90%">
 </p>
 
-The post-layout line regulation is 15.42 mV/V, essentially unchanged from the pre-layout result.
+The post-layout line regulation is 15.417727 mV/V, essentially unchanged from the pre-layout result.
 
 <p align="center">
   <img src="img/postlayout/total_curent.png" width="90%">
 </p>
 
-At VDD = 2.5 V, the extracted circuit draws 85.17 µA. The corresponding nominal power is calculated directly as:
+At VDD = 2.5 V, the extracted circuit draws 85.1725 µA. The corresponding nominal power is calculated directly as:
 
 ```math
 P_{\mathrm{post}}
