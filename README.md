@@ -371,7 +371,7 @@ The extracted layout and schematic contain equivalent devices, dimensions, and e
   <img src="img/postlayout/erc_warning.png" width="95%">
 </p>
 
-The ERC report contains a reviewed floating-well warning associated with the implemented PNP structure. The warning is documented for traceability and does not alter the matched LVS result.
+The ERC report flags the N-well associated with the PNP structure because it is intentionally connected to VSS rather than the designated POWER/VDD net. This is an expected topology-specific warning, not an unintended floating connection. The connection was verified in the layout and the LVS result remains matched; therefore, the warning was reviewed and accepted.
 
 ---
 
@@ -385,35 +385,67 @@ Layout → Pegasus LVS/SVDB → Quantus RC extraction → SPICE netlist → Cade
 
 ### 5.1 Quantus Configuration
 
+The following setup uses the Pegasus LVS query database as the physical-design input for Quantus. The configuration defines the extraction input, technology setup, parasitic type, and extracted-netlist output.
+
 <table>
   <tr>
-    <td width="50%"><img src="img/postlayout/pex_setup_1.png" width="100%"></td>
-    <td width="50%"><img src="img/postlayout/pex_setup_2.png" width="100%"></td>
+    <th width="50%">Quantus Run Form — Setup</th>
+    <th width="50%">Quantus Run Form — Output Configuration</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="img/postlayout/pex_setup_1.png" width="100%">
+    </td>
+    <td align="center">
+      <img src="img/postlayout/pex_setup_2.png" width="100%">
+    </td>
+  </tr>
+
+  <tr>
+    <th>Pegasus Query Data and Technology Setup</th>
+    <th>RC Extraction Configuration</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="img/postlayout/pex_setup_directory.png" width="100%">
+    </td>
+    <td align="center">
+      <img src="img/postlayout/pex_extraction.png" width="100%">
+    </td>
   </tr>
 </table>
 
-<p align="center">
-  <img src="img/postlayout/pex_setup_directory.png" width="95%">
-</p>
-
-<p align="center">
-  <img src="img/postlayout/pex_extraction.png" width="95%">
-</p>
-
-RC extraction was used for the final post-layout verification. No-parasitic and C-only extracted-device runs were also used during debugging to separate device-netlisting behavior from interconnect parasitics.
+The Pegasus query directory supplies the LVS-derived physical database to Quantus. The final post-layout netlist was generated using RC extraction so that both interconnect resistance and parasitic capacitance were included.
 
 ### 5.2 Extracted SPICE Integration
 
-<p align="center">
-  <img src="img/postlayout/post_layout_spice_format.png" width="95%">
-</p>
+The extracted SPICE netlist was connected to the original BGR testbench and selected as the implementation of the BGR block in Cadence ADE.
 
 <table>
   <tr>
-    <td width="50%"><img src="img/postlayout/testbench_setup.png" width="100%"></td>
-    <td width="50%"><img src="img/postlayout/maestro_setup.png" width="100%"></td>
+    <th width="50%">Extracted SPICE Output</th>
+    <th width="50%">Post-Layout Testbench</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="img/postlayout/post_layout_spice_format.png" width="100%">
+    </td>
+    <td align="center">
+      <img src="img/postlayout/testbench_setup.png" width="100%">
+    </td>
+  </tr>
+
+  <tr>
+    <th colspan="2">ADE Maestro Post-Layout Setup</th>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="img/postlayout/maestro_setup.png" width="50%">
+    </td>
   </tr>
 </table>
+
+This configuration allows the same analyses and output expressions used during pre-layout verification to be reused with the extracted circuit.
 
 ### 5.3 PNP `AREA` Compatibility Issue
 
