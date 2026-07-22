@@ -150,14 +150,14 @@ with `Tmin = -40 °C` and `Tmax = 125 °C`.
 
 The schematic contains the Banba core, a 24:1 PNP array, matched resistor branches, an output-current mirror, an operational amplifier, a compensation network, and a startup circuit.
 
-The resistor network is approximately:
+The resistor network is:
 
 | Component | Function | Nominal value |
 |---|---|---:|
-| `R4` | PTAT-current generation | 12.4 kΩ |
-| `R5` | Core branch resistor | 73.5 kΩ |
-| `R18` | Matched core branch resistor | 73.5 kΩ |
-| `R7` | Output-current-to-voltage conversion | 75.2 kΩ |
+| `R4` | PTAT-current generation | 12.3998 kΩ |
+| `R5` | Core branch resistor | 73.5024 kΩ |
+| `R18` | Matched core branch resistor | 73.5024 kΩ |
+| `R7` | Output-current-to-voltage conversion | 75.179 kΩ |
 
 ### 2.3 Operational Amplifier
 
@@ -170,7 +170,7 @@ The operational amplifier must provide adequate gain over the input common-mode 
 The following figure compares the pre-layout and post-layout amplifier responses. The extracted response is expected to preserve sufficient DC gain, unity-gain bandwidth, and phase margin for correct BGR regulation.
 
 <p align="center">
-  <img src="img/postlayout/opamp_pre_post_comparison.png" width="95%">
+  <img src="img/postlayout/opamp_result.png" width="95%">
 </p>
 
 The exact gain, GBW, and phase-margin values are annotated in the committed comparison figure.
