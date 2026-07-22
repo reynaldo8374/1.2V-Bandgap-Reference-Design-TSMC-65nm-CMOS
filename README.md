@@ -98,31 +98,31 @@ The post-layout values remain close to the pre-layout results, indicating that t
 
 ### 3.1 CTAT and PTAT Components
 
-The base-emitter voltage of a bipolar transistor, \(V_{BE}\), has a negative temperature coefficient and therefore provides the **CTAT** component.
+ The base-emitter voltage of a bipolar transistor, $V_{BE}$, has a negative temperature coefficient and therefore provides the **CTAT** component.
 
 A pair of bipolar devices operated at different current densities produces:
 
-\[
+$$
 \Delta V_{BE} = V_T \ln(N)
-\]
+$$
 
 where:
 
-- \(V_T = kT/q\) is the thermal voltage,
-- \(N\) is the emitter-area or current-density ratio, and
-- \(\Delta V_{BE}\) is proportional to absolute temperature.
+- $V_T = kT/q$ is the thermal voltage,
+- $N$ is the emitter-area or current-density ratio, and
+- $\Delta V_{BE}$ is proportional to absolute temperature.
 
 The implemented bipolar ratio is:
 
-\[
+$$
 Q_0:Q_1 = 24:1
-\]
+$$
 
 ### 3.2 Banba-Style Current Summation
 
 The resistor network converts the CTAT and PTAT voltages into currents. The output resistor converts the summed current back into the reference voltage:
 
-\[
+$$
 V_{\mathrm{REF}}
 \approx
 R_{\mathrm{OUT}}
@@ -131,33 +131,33 @@ R_{\mathrm{OUT}}
 +
 \frac{\Delta V_{BE}}{R_{\mathrm{PTAT}}}
 \right)
-\]
+$$
 
 In this design:
 
-- the small resistor in the \(\Delta V_{BE}\) path primarily controls the PTAT contribution and temperature slope,
+- the small resistor in the $\Delta V_{BE}$ path primarily controls the PTAT contribution and temperature slope,
 - the two larger branch resistors preserve the Banba core relationship,
 - the output resistor primarily scales and recenters the final reference voltage, and
-- the op-amp forces the two internal nodes \(V_X\) and \(V_Y\) to nearly equal voltages.
+- the op-amp forces the two internal nodes $V_X$ and $V_Y$ to nearly equal voltages.
 
 ### 3.3 Temperature-Coefficient Definition
 
 The reported temperature coefficient is calculated using:
 
-\[
+$$
 TC =
 \frac{V_{\mathrm{REF,max}}-V_{\mathrm{REF,min}}}
 {V_{\mathrm{REF}}(27^\circ\mathrm{C})\,(T_{\max}-T_{\min})}
-\times 10^6
+	imes 10^6
 \quad [\mathrm{ppm}/^\circ\mathrm{C}]
-\]
+$$
 
 with:
 
-\[
+$$
 T_{\min}=-40^\circ\mathrm{C},\qquad
 T_{\max}=125^\circ\mathrm{C}
-\]
+$$
 
 ---
 
@@ -175,11 +175,11 @@ The final resistor network visible in the schematic uses approximately:
 
 | Component | Approximate Function | Nominal Resistance |
 |---|---|---:|
-| PTAT-path resistor | Sets \(\Delta V_{BE}\)-derived current | approximately 12.4 kΩ |
+| PTAT-path resistor | Sets $\Delta V_{BE}$-derived current | approximately 12.4 kΩ |
 | Core branch resistor 1 | CTAT/core branch scaling | approximately 73.5 kΩ |
 | Core branch resistor 2 | Matched core branch | approximately 73.5 kΩ |
 | Output resistor | Converts summed current into VREF | approximately 75.2 kΩ |
-| BJT ratio | Generates \(\Delta V_{BE}\) | 24:1 |
+| BJT ratio | Generates $\Delta V_{BE}$ | 24:1 |
 
 The temperature coefficient was tuned using the core PTAT-path resistor. After the temperature slope was optimized, the output resistor was used to center the TT, 27 °C output near 1.2 V.
 
@@ -191,9 +191,9 @@ The temperature coefficient was tuned using the core PTAT-path resistor. After t
 
 The operational amplifier regulates the Banba core by forcing:
 
-\[
+$$
 V_X \approx V_Y
-\]
+$$
 
 Its biasing, gain, and stability must remain sufficient across process and temperature variation because an incorrect loop operating point directly disturbs the PTAT/CTAT current balance.
 
@@ -229,9 +229,9 @@ The pre-layout response remains close to 1.2 V across the complete temperature r
 
 The nominal TT temperature coefficient is approximately:
 
-\[
+$$
 TC_{\mathrm{pre,TT}} = 2.66\ \mathrm{ppm}/^\circ\mathrm{C}
-\]
+$$
 
 This result was used as the baseline during post-layout resistor retuning.
 
@@ -243,19 +243,19 @@ This result was used as the baseline during post-layout resistor retuning.
 
 The supply voltage was swept from 2.0 V to 3.0 V at TT and 27 °C.
 
-\[
+$$
 \mathrm{Line\ Regulation}
 =
 \frac{V_{\mathrm{OUT,max}}-V_{\mathrm{OUT,min}}}
 {V_{\mathrm{DD,max}}-V_{\mathrm{DD,min}}}
-\]
+$$
 
 The reported pre-layout line regulation is:
 
-\[
+$$
 \mathrm{LineReg}_{\mathrm{pre}}
 \approx 15.51\ \mathrm{mV/V}
-\]
+$$
 
 ### 5.5 Startup Verification
 
@@ -289,10 +289,10 @@ The three runs verify startup under fast, intermediate, and slow supply ramps.
 
 The reported low-frequency pre-layout PSRR is approximately:
 
-\[
+$$
 \mathrm{PSRR}_{\mathrm{pre}}
 \approx -36.88\ \mathrm{dB}
-\]
+$$
 
 The response is dominated by the supply coupling through the biasing and amplifier paths, with frequency-dependent behavior caused by the amplifier and compensation network.
 
@@ -304,13 +304,13 @@ The response is dominated by the supply coupling through the biasing and amplifi
 
 For 1000 process-variation samples at 27 °C:
 
-\[
+$$
 \mu_{\mathrm{process,pre}} \approx 1.20021\ \mathrm{V}
-\]
+$$
 
-\[
+$$
 \sigma_{\mathrm{process,pre}} \approx 1.96\ \mathrm{mV}
-\]
+$$
 
 ### 5.8 Monte Carlo Mismatch
 
@@ -320,13 +320,13 @@ For 1000 process-variation samples at 27 °C:
 
 For 1000 mismatch samples at 27 °C:
 
-\[
+$$
 \mu_{\mathrm{mismatch,pre}} \approx 1.20005\ \mathrm{V}
-\]
+$$
 
-\[
+$$
 \sigma_{\mathrm{mismatch,pre}} \approx 445.86\ \mu\mathrm{V}
-\]
+$$
 
 The process distribution is wider than the mismatch-only distribution, showing that global process variation is the dominant simulated source of absolute reference-voltage spread.
 
@@ -461,17 +461,17 @@ The post-layout netlist was generated using **Cadence Quantus with Pegasus query
 
 ### 8.1 Extraction Workflow
 
-\[
-\text{Layout}
+$$
+	ext{Layout}
 \rightarrow
-\text{Pegasus LVS / SVDB}
+	ext{Pegasus LVS / SVDB}
 \rightarrow
-\text{Quantus RC Extraction}
+	ext{Quantus RC Extraction}
 \rightarrow
-\text{Extracted SPICE Netlist}
+	ext{Extracted SPICE Netlist}
 \rightarrow
-\text{Cadence ADE Post-Layout Simulation}
-\]
+	ext{Cadence ADE Post-Layout Simulation}
+$$
 
 ### 8.2 Quantus Pre-Setup
 
@@ -555,9 +555,9 @@ The op-amp, resistor devices, BJT array, and complete BGR were individually chec
 
 At TT and 27 °C, the extracted result is approximately:
 
-\[
+$$
 V_{\mathrm{REF,post}} \approx 1.2001\ \mathrm{V}
-\]
+$$
 
 The corner curves remain centered near 1.2 V, while the largest variation occurs at the fast/slow extremes over temperature.
 
@@ -569,9 +569,9 @@ The corner curves remain centered near 1.2 V, while the largest variation occurs
 
 The current repository result shows a nominal TT temperature coefficient of approximately:
 
-\[
+$$
 TC_{\mathrm{post,TT}} \approx 2.55\ \mathrm{ppm}/^\circ\mathrm{C}
-\]
+$$
 
 This is close to, and slightly better than, the 2.66 ppm/°C pre-layout result.
 
@@ -585,15 +585,15 @@ The core PTAT resistor was retuned after extraction to recover the optimum tempe
 
 From the displayed markers:
 
-- \(V_{\mathrm{OUT}}\) at \(V_{\mathrm{DD}}=2.0\ \mathrm{V}\) is approximately 1.19108 V,
-- \(V_{\mathrm{OUT}}\) at \(V_{\mathrm{DD}}=3.0\ \mathrm{V}\) is approximately 1.20649 V.
+- $V_{\mathrm{OUT}}$ at $V_{\mathrm{DD}}=2.0\ \mathrm{V}$ is approximately 1.19108 V,
+- $V_{\mathrm{OUT}}$ at $V_{\mathrm{DD}}=3.0\ \mathrm{V}$ is approximately 1.20649 V.
 
 Therefore:
 
-\[
+$$
 \mathrm{LineReg}_{\mathrm{post}}
 \approx 15.42\ \mathrm{mV/V}
-\]
+$$
 
 This result is effectively unchanged from the pre-layout line regulation.
 
@@ -651,18 +651,18 @@ PSRR degrades at high temperature in the shown result, while the low-temperature
 
 At the nominal 2.5 V supply:
 
-\[
+$$
 I_{\mathrm{DD,post}} \approx 85.17\ \mu\mathrm{A}
-\]
+$$
 
-\[
+$$
 P_{\mathrm{post}}
 =
 V_{\mathrm{DD}}I_{\mathrm{DD}}
 \approx
 2.5\ \mathrm{V}\times 85.17\ \mu\mathrm{A}
 \approx 212.9\ \mu\mathrm{W}
-\]
+$$
 
 The current increases with supply voltage, reaching approximately 137 µA at 3.0 V in the displayed sweep.
 
@@ -674,13 +674,13 @@ The current increases with supply voltage, reaching approximately 137 µA at 3.0
 
 For 1000 process-variation samples:
 
-\[
+$$
 \mu_{\mathrm{process,post}} \approx 1.20023\ \mathrm{V}
-\]
+$$
 
-\[
+$$
 \sigma_{\mathrm{process,post}} \approx 1.935\ \mathrm{mV}
-\]
+$$
 
 ### 9.10 Monte Carlo Mismatch
 
@@ -690,13 +690,13 @@ For 1000 process-variation samples:
 
 For 1000 mismatch samples:
 
-\[
+$$
 \mu_{\mathrm{mismatch,post}} \approx 1.20001\ \mathrm{V}
-\]
+$$
 
-\[
+$$
 \sigma_{\mathrm{mismatch,post}} \approx 545.19\ \mu\mathrm{V}
-\]
+$$
 
 The process variation remains the dominant contributor to the simulated absolute reference-voltage spread.
 
@@ -809,7 +809,7 @@ A two-dimensional trimming strategy can use:
 
 ### 13.3 Curvature Compensation
 
-The first-order bandgap cancellation still leaves nonlinear \(V_{BE}\) curvature. Future work can investigate:
+The first-order bandgap cancellation still leaves nonlinear $V_{BE}$ curvature. Future work can investigate:
 
 - second-order curvature compensation,
 - piecewise nonlinear correction,
