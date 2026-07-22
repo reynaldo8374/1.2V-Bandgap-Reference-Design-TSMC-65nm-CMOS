@@ -314,22 +314,49 @@ The run-data setup defines the layout cell and output directories, while the rul
 
 The final DRC run completed with a reviewed density-related warning. No geometry violation affecting the circuit connectivity or device implementation was identified.
 
-### 4.3 LVS and ERC
+### 4.3 Layout Versus Schematic
+
+The Pegasus LVS run compares the devices and connectivity extracted from the layout against the schematic netlist.
 
 <table>
   <tr>
-    <td width="50%"><img src="img/postlayout/lvs_setup_run_data.png" width="100%"></td>
-    <td width="50%"><img src="img/postlayout/lvs_setup_rules.png" width="100%"></td>
+    <th width="50%">LVS Run Data</th>
+    <th width="50%">LVS Rule-Deck Configuration</th>
   </tr>
   <tr>
-    <td width="50%"><img src="img/postlayout/lvs_setup_input.png" width="100%"></td>
-    <td width="50%"><img src="img/postlayout/lvs_setup_output.png" width="100%"></td>
+    <td>
+      <img src="img/postlayout/lvs_setup_run_data.png" width="100%">
+    </td>
+    <td>
+      <img src="img/postlayout/lvs_setup_rules.png" width="100%">
+    </td>
   </tr>
 </table>
+
+<table>
+  <tr>
+    <th width="50%">Layout and Schematic Inputs</th>
+    <th width="50%">LVS Output Configuration</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="img/postlayout/lvs_setup_input.png" width="100%">
+    </td>
+    <td>
+      <img src="img/postlayout/lvs_setup_output.png" width="100%">
+    </td>
+  </tr>
+</table>
+
+#### LVS Extraction Options
 
 <p align="center">
   <img src="img/postlayout/lvs_setup_lvs_options.png" width="90%">
 </p>
+
+The LVS options define the power and ground nets and enable the generation of the Pegasus query database required for the subsequent Quantus extraction flow.
+
+#### LVS Result
 
 <p align="center">
   <img src="img/postlayout/lvs_result.png" width="95%">
@@ -337,13 +364,7 @@ The final DRC run completed with a reviewed density-related warning. No geometry
 
 **LVS status: MATCH**
 
-The schematic and extracted layout contain equivalent devices, dimensions, and connectivity. The LVS run also generated the Pegasus query database used by Quantus.
-
-<p align="center">
-  <img src="img/postlayout/erc_warning.png" width="95%">
-</p>
-
-The ERC report includes a reviewed floating-well warning associated with the implemented device structure. It is retained in the documentation for traceability; the main LVS comparison remains matched.
+The extracted layout and schematic contain equivalent devices, dimensions, and electrical connectivity.
 
 ---
 
